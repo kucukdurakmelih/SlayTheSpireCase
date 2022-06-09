@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417c45988edc48ba94ca7cf135b70fc5, type: 3}
+  m_Name: Strike
+  m_EditorClassIdentifier: 
+  isExhaustable: 0
+  cardName: Strike
+  cardCost: 1
+  cardSprite: {fileID: 21300000, guid: 31c0e6feb9f68454aa2b418b9e02efb9, type: 3}
+  CardType: 0
