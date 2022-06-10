@@ -11,59 +11,68 @@ public class Card : MonoBehaviour
     internal int cardCost;
     internal Sprite cardSprite;
     internal CardType cardType;
-    private  bool isExhaustable;
 
-    private void InitCard()
+    internal SpriteRenderer _spriteRenderer;
+
+
+    public void UpdateOrderInLayer(int order) => _spriteRenderer.sortingOrder = order;
+
+    public void InitCard()
     {
         cardName = _scriptableObject.cardName;
         cardCost = _scriptableObject.cardCost;
         cardSprite = _scriptableObject.cardSprite;
         cardType = _scriptableObject.CardType;
-        isExhaustable = _scriptableObject.isExhaustable;
 
-        var rend = GetComponent<SpriteRenderer>();
-        rend.sprite = cardSprite;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.sprite = cardSprite;
     }
 
-    public virtual void CardPutToTheDeck(Transform deckTransform)
+    public virtual void CardPutToTheDeck()
     {
-        transform.position = deckTransform.position;
+        var deckPosition = EventManager.PutCardToDeck(this);
+        transform.position = deckPosition;
         gameObject.SetActive(false);
-        InitCard();
-        
     }
 
     public virtual void CardDrawn()
     {
+        EventManager.PutCardToHand?.Invoke(this);
         gameObject.SetActive(true);
         transform.localScale = new Vector3(.2f, .2f, .2f);
         var targetScale = new Vector3(1, 1, 1);
         transform.DOScale(targetScale, .5f);
-
     }
 
     public virtual void CardUsed()
     {
-        
+        EventManager.RemoveFromHand?.Invoke(this);
+        CardDestroyed();
     }
 
     public virtual void CardDestroyed()
     {
-        if(isExhaustable)
-            PutCardToExhaustPile();
-        else
-            PutCardToDiscardPile();
-    }
-
-    public virtual void PutCardToExhaustPile()
-    {
-        
-    }
-
-    public virtual void PutCardToDiscardPile()
-    {
-        EventManager.PutCardToDiscardPile?.Invoke(this);
+        PutCardToDiscardPile();
     }
     
-    
+
+    internal void PutCardToDiscardPile()
+    {
+        var discardPilePos = EventManager.PutCardToDiscardPile(this);
+        transform.DOMove(discardPilePos, 0.5f);
+        var targetScale = new Vector3(.2f, .2f, .2f);
+        transform.DOScale(targetScale, .5f).OnComplete(() => { gameObject.SetActive(false); });
+    }
+
+    public void HighlightCard()
+    {
+        var targetScale = new Vector3(1.2f, 1.2f, 1.2f);
+        transform.localScale = targetScale;
+    }
+
+    public void UnHighlightCard()
+    {
+        var targetScale = new Vector3(1, 1, 1);
+        transform.localScale = targetScale;
+    }
 }
