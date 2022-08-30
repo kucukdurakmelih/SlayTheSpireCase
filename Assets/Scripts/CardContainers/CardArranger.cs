@@ -52,7 +52,7 @@ public class CardArranger : MonoBehaviour
         for (int i = 0; i < cardCount; i++)
         {
             var arrangeableCard = _arrangeableCards[i];
-            arrangeableCard.card.UpdateOrderInLayer(i);
+            //arrangeableCard.card.UpdateOrderInLayer(i);
             var indexDifference = i - centerIndex;
 
             var distance = indexDifference * distanceBetweenCards;
@@ -123,7 +123,7 @@ public class CardArranger : MonoBehaviour
         {
             var trans = arrangeableCard.card.transform;
             var cardPos = trans.position;
-            var pos = Vector2.Lerp(cardPos, arrangeableCard.targetPos, Time.deltaTime * 5);
+            var pos = Vector3.Lerp(cardPos, arrangeableCard.targetPos, Time.deltaTime * 5);
             trans.position = pos;
         }
     }
@@ -136,24 +136,24 @@ public class CardArranger : MonoBehaviour
 
     private void SimulateBezierCurve()
     {
-        for (float i = 0; i < 20; i++)
+        for (float i = 0; i < 50; i++)
         {
             var time = (float)1 / 20 * i;
             var pos = CalculateBezierCurve(time);
-            Gizmos.DrawSphere(pos, .2f);
+            Gizmos.DrawSphere(pos, 5f);
         }
     }
 
-    private Vector2 CalculateBezierCurve(float time)
+    private Vector3 CalculateBezierCurve(float time)
     {
-        Vector2 startPos = points[0].position;
-        Vector2 midPos = points[1].position;
-        Vector2 endPos = points[2].position;
+        Vector3 startPos = points[0].position;
+        Vector3 midPos = points[1].position;
+        Vector3 endPos = points[2].position;
 
-        var b1 = Vector2.Lerp(startPos, midPos, time);
-        var b2 = Vector2.Lerp(midPos, endPos, time);
+        var b1 = Vector3.Lerp(startPos, midPos, time);
+        var b2 = Vector3.Lerp(midPos, endPos, time);
 
-        var curvePos = Vector2.Lerp(b1, b2, time);
+        var curvePos = Vector3.Lerp(b1, b2, time);
         return curvePos;
     }
 

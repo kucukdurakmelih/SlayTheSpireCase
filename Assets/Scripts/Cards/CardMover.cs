@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 
-public class CardMover : MonoBehaviour
+public class CardMover : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerExitHandler, IDragHandler, IPointerUpHandler
 {
     private Card _card;
     private float activateYAxisThreshold = -1;
@@ -40,7 +42,35 @@ public class CardMover : MonoBehaviour
 
     private void MoveCard()
     {
-        var mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = Vector2.Lerp(transform.position, mousePos, .7f);
+        var mousePos = Input.mousePosition;
+        transform.position = Vector3.Lerp(transform.position, mousePos, .7f);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        EventManager.CardHighlighted?.Invoke(_card);
+        _card.HighlightCard();
+    }
+
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        EventManager.CardDeHighlighted?.Invoke(_card);
+        _card.UnHighlightCard();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        MoveCard();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if(transform.position.y > activateYAxisThreshold)
+            _card.CardUsed();
     }
 }

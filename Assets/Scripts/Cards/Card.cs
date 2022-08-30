@@ -2,6 +2,7 @@ using DefaultNamespace;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Card : MonoBehaviour
@@ -12,10 +13,10 @@ public class Card : MonoBehaviour
     internal Sprite cardSprite;
     internal CardType cardType;
 
-    internal SpriteRenderer _spriteRenderer;
+    internal Image _image;
 
 
-    public void UpdateOrderInLayer(int order) => _spriteRenderer.sortingOrder = order;
+    //public void UpdateOrderInLayer(int order) => _spriteRenderer.sortingOrder = order;
 
     public void InitCard()
     {
@@ -24,8 +25,8 @@ public class Card : MonoBehaviour
         cardSprite = _scriptableObject.cardSprite;
         cardType = _scriptableObject.CardType;
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = cardSprite;
+        _image = GetComponent<Image>();
+        _image.sprite = cardSprite;
     }
 
     public virtual void CardPutToTheDeck()

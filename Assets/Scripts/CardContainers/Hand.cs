@@ -19,6 +19,7 @@ public class Hand : MonoBehaviour
     {
         cardsAtHand.Add(card);
         _cardArranger.ArrangeCard(card);
+        card.transform.parent = transform;
     }
 
     private void RemoveFromHand(Card card)
